@@ -19,8 +19,8 @@ if (process.env.NODE_ENV === "production") {
   sequelize = new Sequelize(process.env.DATABASE_URL || dbConfig.DATABASE, {
     dialect:  'postgres',
     protocol: 'postgres',
-    port:     match[4],
-    host:     match[3],
+    port: 5432,
+    host: 'ec2-50-19-231-222.compute-1.amazonaws.com',
     logging:  true //false
   })
 } else {

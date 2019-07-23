@@ -20,15 +20,23 @@ const user = (sequelize, DataTypes) => {
   });
 
   User.findByLogin = async login => {
-    console.log('login', login)
-    let user = await User.findOne({
-      where: { id: login },
-    });
-
-    if (!user) {
+    let user
+    try {
       user = await User.findOne({
-        where: { email: login },
+        where: { id: login },
       });
+    } catch (error) {
+      console.error('User.findOne id error', error)
+    }
+    
+    if (!user) {
+      try {
+        user = await User.findOne({
+          where: { email: login },
+        });
+      } catch (error) {
+        console.error('User.findOne email error', error)
+      }
     }
 
     return user;

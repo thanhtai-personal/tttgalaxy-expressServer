@@ -20,6 +20,7 @@ const user = (sequelize, DataTypes) => {
   });
 
   User.findByLogin = async login => {
+    console.log('sequelize===', sequelize)
     let user
     try {
       user = await User.findOne({

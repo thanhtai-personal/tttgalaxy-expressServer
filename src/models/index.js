@@ -8,6 +8,14 @@ let dbConfig = {
   DATABASE_PASSWORD:'abcd1234',
 }
 
+if (process.env.NODE_ENV === "production") {
+  dbConfig = {
+    DATABASE:'tttgalaxy',
+    DATABASE_USER:'postgres',
+    DATABASE_PASSWORD:'abcd1234',
+  }
+}
+
 const sequelize = new Sequelize(
   process.env.DATABASE || dbConfig.DATABASE,
   process.env.DATABASE_USER || dbConfig.DATABASE_USER,

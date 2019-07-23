@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const jwt = require('jsonwebtoken')
+const secret = "tttgalaxy-secret-key"
 
 const { models, sequelize } = require('./../src/models');
 

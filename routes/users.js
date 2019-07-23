@@ -8,6 +8,10 @@ router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
+router.get('/test-get', function(req, res, next) {
+  res.send('respond with a resource');
+});
+
 router.post('/login', async function(req, res, next) {
   let data = req.body;
     let user = await findUserByEmail(data.email);

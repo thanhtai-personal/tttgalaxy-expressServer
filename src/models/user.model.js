@@ -3,24 +3,50 @@
 const uuidv1 = require('uuid/v1');
 
 const user = (sequelize, DataTypes) => {
-  const User = sequelize.define('user', {
-    email: {
-      type: DataTypes.STRING,
-      unique: true,
-    },
+  const User = sequelize.define('users', {
     id: {
-      type: DataTypes.STRING,
+      type: DataTypes.UUID,
       unique: true,
       primaryKey: true
     },
+    email: {
+      type: DataTypes.STRING,
+      unique: true
+    },
     password: {
       type: DataTypes.STRING,
-      unique: true,
+      unique: true
+    },
+    createdAt: {
+      type: DataTypes.DATE
+    },
+    updatedAt: {
+      type: DataTypes.DATE
+    },
+    firstName: {
+      type: DataTypes.STRING(30)
+    },
+    lastName: {
+      type: DataTypes.STRING(30)
+    },
+    comeFrom: {
+      type: DataTypes.STRING
+    },
+    birthDay: {
+      type: DataTypes.DATEONLY
+    },
+    age: {
+      type: DataTypes.INTEGER
+    },
+    phone: {
+      type: DataTypes.STRING(15)
+    },
+    isDelete: {
+      type: DataTypes.BOOLEAN
     }
   });
 
   User.findByLogin = async login => {
-    console.log('sequelize===', sequelize)
     let user
     try {
       user = await User.findOne({

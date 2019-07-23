@@ -1,9 +1,7 @@
 var express = require('express');
 var router = express.Router();
-const jwt = require('jsonwebtoken')
-const secret = "tttgalaxy-secret-key"
 
-const { models, sequelize } = require('./../src/models');
+const userService = require('./../src/services/user.service')
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -15,49 +13,15 @@ router.get('/test-get', function(req, res, next) {
 });
 
 router.post('/login', async function(req, res, next) {
-  let data = req.body;
-    let user = await findUserByEmail(data.email);
-    if (user) {
-      if (user.password === data.password) {
-        let token = jwt.sign({
-          email: user.email,
-        }, secret, { expiresIn : 60*60*24 });
-        res.json({
-          message: 'Login success!',
-          token: token
-        })
-      } else {
-        res.json({
-          message: 'wrong username or password!'
-        })
-      }
-    } else {
-      res.json({
-        message: 'wrong username or password!'
-      })
-    }
+  let resultData = await userService.login(req.body)
+  return res.json(resultData)
 });
 
 router.post('/register', async function (req, res) {
-  let data = req.body;
-  let user = await findUserByEmail(data.email);
-  if (!user) {
-    let user = await models.User.createUser(data)
-    res.json({
-      message: 'created user',
-      data: user
-    })
-  } else {
-    res.json({
-      message: 'user is existed'
-    })
-  }
+  console.log('user service', userService)
+  console.log('user service aou', userService.addOrUpdate)
+  let resultData = await userService.addOrUpdate(req.body)
+  return res.json(resultData)
 })
-
-
-
-async function findUserByEmail (email) {
-  return await models.User.findByLogin(email)
-}
 
 module.exports = router;

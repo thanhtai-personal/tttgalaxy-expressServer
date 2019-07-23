@@ -70,7 +70,7 @@ const user = (sequelize, DataTypes) => {
   };
 
 
-  User.createUser = async model => {
+  User.createOrUpdateUser = async model => {
     return User
         .findOne({ where: { email: model.email } })
         .then((obj) => {

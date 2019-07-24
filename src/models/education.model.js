@@ -36,6 +36,16 @@ const education = (sequelize, DataTypes) => {
     }
   });
 
+  Education.findByIds = async (ids) => {
+    try {
+      return await Education.findAll({
+        where: { id: {in: ids} }
+      })
+    } catch (error) {
+      return []
+    }
+  }
+
   return Education;
 };
 

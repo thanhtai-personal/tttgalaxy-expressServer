@@ -36,12 +36,20 @@ if (process.env.NODE_ENV === "production") {
   );
 }
 
-
-
-
-
 const models = {
-  User: sequelize.import('./user.model')
+  User: sequelize.import('./user.model'),
+  Skill: sequelize.import('./skill.model'),
+  School: sequelize.import('./school.model'),
+  Group: sequelize.import('./group.model'),
+  Experience: sequelize.import('./experience.model'),
+  Education: sequelize.import('./education.model'),
+  Company: sequelize.import('./company.model'),
+  CompanyExperience: sequelize.import('./company_experience.model'),
+  EducationSchool: sequelize.import('./education_school.model'),
+  GroupSkill: sequelize.import('./group_skill.model'),
+  UserEducation: sequelize.import('./user_education.model'),
+  UserExperience: sequelize.import('./user_experience.model'),
+  UserSkill: sequelize.import('./user_skill.model')
 };
 
 Object.keys(models).forEach(key => {

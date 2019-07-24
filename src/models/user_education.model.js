@@ -26,8 +26,22 @@ const user_education = (sequelize, DataTypes) => {
     }
   });
 
+  UserEducation.findIdsByUserId = async (userId) => {
+    try {
+      let ids = await UserEducation.find({
+        where: {
+          userId: userId
+        }
+      })
+      return ids
+    } catch (error) {
+      return []
+    }
+  }
+
   return UserEducation;
 };
+
 
 module.exports = {
   default: user_education

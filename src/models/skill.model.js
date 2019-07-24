@@ -24,6 +24,16 @@ const skill = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN
     }
   });
+  
+  Skill.findByIds = async (ids) => {
+    try {
+      return await Skill.findAll({
+        where: { id: {in: ids} }
+      })
+    } catch (error) {
+      return []
+    }
+  }
 
   return Skill;
 };

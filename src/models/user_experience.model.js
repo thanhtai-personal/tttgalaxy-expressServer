@@ -25,6 +25,19 @@ const user_experience = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN
     }
   });
+  
+  UserExperience.findIdsByUserId = async (userId) => {
+    try {
+      let ids = await UserExperience.find({
+        where: {
+          userId: userId
+        }
+      })
+      return ids
+    } catch (error) {
+      return []
+    }
+  }
 
   return UserExperience;
 };

@@ -13,6 +13,7 @@ CREATE TABLE public.users
     "lastName" character varying(30)[] COLLATE pg_catalog."default",
     "comeFrom" text COLLATE pg_catalog."default",
     "birthDay" timestamp without time zone,
+    "profileImageUrl": text COLLATE pg_catalog."default",
     age bigint,
     phone character varying(15)[] COLLATE pg_catalog."default",
     "isDelete" boolean,

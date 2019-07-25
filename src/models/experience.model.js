@@ -16,12 +16,6 @@ const experience = (sequelize, DataTypes) => {
     title: {
       type: DataTypes.STRING
     },
-    from: {
-      type: DataTypes.DATE
-    },
-    to: {
-      type: DataTypes.DATE
-    },
     createdAt: {
       type: DataTypes.DATE
     },
@@ -29,9 +23,6 @@ const experience = (sequelize, DataTypes) => {
       type: DataTypes.DATE
     },
     isDelete: {
-      type: DataTypes.BOOLEAN
-    },
-    isPresent: {
       type: DataTypes.BOOLEAN
     }
   });

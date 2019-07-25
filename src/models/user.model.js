@@ -20,13 +20,13 @@ const user = (sequelize, DataTypes) => {
     createdAt: {
       type: DataTypes.DATE
     },
+    profileImageUrl: {
+      type: DataTypes.STRING(30)
+    },
     updatedAt: {
       type: DataTypes.DATE
     },
-    firstName: {
-      type: DataTypes.STRING(30)
-    },
-    lastName: {
+    name: {
       type: DataTypes.STRING(30)
     },
     comeFrom: {

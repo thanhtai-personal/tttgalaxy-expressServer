@@ -27,11 +27,15 @@ const group_skill = (sequelize, DataTypes) => {
   });
 
   GroupSkill.findGroupIdsBySkillIds = async (skillIds) => {
-    let ids = await GroupSkill.findAll({
-      select: 'groupId',
-      where: { skillId: {in: skillIds} }
-    })
-    return ids
+    try {
+      let ids = await GroupSkill.findAll({
+        //select: 'groupId',
+        where: { skillId: { in: skillIds } }
+      })
+      return ids
+    } catch (error) {
+      return []
+    }
   }
 
   return GroupSkill;

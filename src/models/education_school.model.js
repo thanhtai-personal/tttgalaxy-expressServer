@@ -28,10 +28,14 @@ const education_school = (sequelize, DataTypes) => {
 
   
   EducationSchool.findSchoolIdsByEducationIds = async (educationIds) => {
-    return await GroupSkill.findAll({
-      select: 'schoolId',
-      where: { educationId: {in: educationIds} }
-    })
+    try {
+      return await GroupSkill.findAll({
+        select: 'schoolId',
+        where: { educationId: {in: educationIds} }
+      })
+    } catch (error) {
+      return []
+    }
   }
 
   return EducationSchool;

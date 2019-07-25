@@ -48,15 +48,13 @@ const userService = () => {
     //need to use join db
     try {
       let user = await models.User.findByEmail(data.email)
+      user.password = null
       const getSkill = async (userId) => {
-        console.log('call get Skill')
         let skillIds = await models.UserSkill.findSkillIdsByUserId(userId)
         let userSkill = await models.UserSkill.findByUserId(userId)
         let skill = await models.Skill.findByIds(skillIds)
         let groupIds = await models.GroupSkill.findGroupIdsBySkillIds(skillIds)
-        console.log('call get Skill end 4')
         let group = await models.Group.findByIds(groupIds)
-        console.log('call get Skill end all')
         return { skill, group, userSkill }
       }
 
@@ -68,18 +66,15 @@ const userService = () => {
       }
 
       const getEducation = async (userId) => {
-        console.log('call get edu')
         let educationIds = await models.UserEducation.findEducationIdsByUserId(userId)
         let userEducation = await models.UserEducation.findByUserId(userId)
         let education = await models.Skill.findByIds(educationIds)
         let schoolIds = await models.EducationSchool.findSchoolIdsByEducationIds(educationIds)
         let school = await models.School.findByIds(schoolIds)
-        console.log('call get edu end')
         return { education, school, userEducation }
       }
 
       let dataRs = await Promise.all([getSkill(user.id), getExperience(user.id), getEducation(user.id)])
-      console.log('passed all')
 
       return {
         basicInfo: user,

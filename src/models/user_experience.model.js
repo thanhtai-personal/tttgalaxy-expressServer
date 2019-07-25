@@ -26,14 +26,27 @@ const user_experience = (sequelize, DataTypes) => {
     }
   });
   
-  UserExperience.findIdsByUserId = async (userId) => {
+  UserExperience.findExperienceIdsByUserId = async (userId) => {
     try {
       let ids = await UserExperience.find({
+        select: 'experienceId',
         where: {
           userId: userId
         }
       })
       return ids
+    } catch (error) {
+      return []
+    }
+  }
+
+  UserExperience.findByUserId = async (userId) => {
+    try {
+      return await UserExperience.find({
+        where: {
+          userId: userId
+        }
+      })
     } catch (error) {
       return []
     }

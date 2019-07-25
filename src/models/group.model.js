@@ -24,6 +24,16 @@ const group = (sequelize, DataTypes) => {
     }
   });
 
+  Group.findByIds = async (ids) => {
+    try {
+      return await Group.findAll({
+        where: { id: {in: ids} }
+      })
+    } catch (error) {
+      return []
+    }
+  }
+
   return Group;
 };
 

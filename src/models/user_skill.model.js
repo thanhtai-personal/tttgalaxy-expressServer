@@ -29,14 +29,28 @@ const user_skill = (sequelize, DataTypes) => {
     }
   });
 
-  UserSkill.findIdsByUserId = async (userId) => {
+  UserSkill.findSkillIdsByUserId = async (userId) => {
     try {
       let ids = await UserSkill.find({
+        select: 'skillId',
         where: {
           userId: userId
         }
       })
       return ids
+    } catch (error) {
+      return []
+    }
+  }
+
+  UserSkill.findByUserId = async (userId) => {
+    try {
+      let rs =  await UserSkill.find({
+        where: {
+          userId: userId
+        }
+      })
+      return rs
     } catch (error) {
       return []
     }

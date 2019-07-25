@@ -46,44 +46,33 @@ const user = (sequelize, DataTypes) => {
     }
   });
 
-  User.findByLogin = async login => {
+  User.findByEmail = async email => {
     let user
     try {
       user = await User.findOne({
-        where: { id: login },
+        where: { email: email },
       });
     } catch (error) {
-      console.error('User.findOne id error', error)
+      console.error('User.findOne email error', error)
     }
-    
-    if (!user) {
-      try {
-        user = await User.findOne({
-          where: { email: login },
-        });
-      } catch (error) {
-        console.error('User.findOne email error', error)
-      }
-    }
-
     return user;
   };
 
 
   User.createOrUpdateUser = async model => {
     return User
-        .findOne({ where: { email: model.email } })
-        .then((obj) => {
-            if(obj) { // update
-                return obj.update({ email: model.email, password: model.password });
-            }
-            else { // insert
-                return User.create({ id: uuidv1(), email: model.email, password: model.password });
-            }
-        })
-        .catch((error) => {
-          return error
-        })
+      .findOne({ where: { email: model.email } })
+      .then((obj) => {
+        if (obj) { // update
+          return obj.update({ email: model.email, password: model.password });
+        }
+        else { // insert
+          return User.create({ id: uuidv1(), email: model.email, password: model.password });
+        }
+      })
+      .catch((error) => {
+        return error
+      })
   };
 
   return User;

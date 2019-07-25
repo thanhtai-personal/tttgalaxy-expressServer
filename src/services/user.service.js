@@ -7,7 +7,7 @@ const userService = () => {
     secret: "tttgalaxy-secret-key"
   }
   UserService.login = async (data) => {
-    let user = await models.User.findByLogin(data.email);
+    let user = await models.User.findByEmail(data.email);
     if (user) {
       if (user.password === data.password) {
         let token = jwt.sign({
@@ -30,7 +30,7 @@ const userService = () => {
   }
 
   UserService.addOrUpdate = async (data) => {
-    let user = await models.User.findByLogin(data.email)
+    let user = await models.User.findByEmail(data.email)
     if (!user) {
       let user = await models.User.createOrUpdateUser(data)
       return {
@@ -45,34 +45,52 @@ const userService = () => {
   }
 
   UserService.getUserData = async (data) => {
+    //need to use join db
     try {
-      let user = await models.User.findByLogin(data.email)
-
+      let user = await models.User.findByEmail(data.email)
       const getSkill = async (userId) => {
-        let skillIds = await models.UserSkill.findIdsByUserId(userId)
+        console.log('call get Skill')
+        let skillIds = await models.UserSkill.findSkillIdsByUserId(userId)
+        let userSkill = await models.UserSkill.findByUserId(userId)
         let skill = await models.Skill.findByIds(skillIds)
-        return skill
+        let groupIds = await models.GroupSkill.findGroupIdsBySkillIds(skillIds)
+        console.log('call get Skill end 4')
+        let group = await models.Group.findByIds(groupIds)
+        console.log('call get Skill end all')
+        return { skill, group, userSkill }
       }
 
       const getExperience = async (userId) => {
-        let experienceIds = await models.UserExperience.findIdsByUserId(userId)
+        let experienceIds = await models.UserExperience.findExperienceIdsByUserId(userId)
+        let userExperience = await models.UserExperience.findByUserId(userId)
         let experience = await models.Skill.findByIds(experienceIds)
-        return experience
+        return { experience, userExperience }
       }
-      
+
       const getEducation = async (userId) => {
-        let educationIds = await models.UserEducation.findIdsByUserId(userId)
+        console.log('call get edu')
+        let educationIds = await models.UserEducation.findEducationIdsByUserId(userId)
+        let userEducation = await models.UserEducation.findByUserId(userId)
         let education = await models.Skill.findByIds(educationIds)
-        return education
+        let schoolIds = await models.EducationSchool.findSchoolIdsByEducationIds(educationIds)
+        let school = await models.School.findByIds(schoolIds)
+        console.log('call get edu end')
+        return { education, school, userEducation }
       }
-            
+
       let dataRs = await Promise.all([getSkill(user.id), getExperience(user.id), getEducation(user.id)])
+      console.log('passed all')
 
       return {
         basicInfo: user,
-        skill: dataRs[0],
-        experiences: dataRs[1],
-        education: dataRs[2]
+        skill: dataRs[0].skill,
+        group: dataRs[0].group,
+        userSkill: dataRs[0].userSkill,
+        experiences: dataRs[1].experience,
+        userExperience: dataRs[1].userExperience,
+        education: dataRs[2].education,
+        school: dataRs[2].school,
+        userEducation: dataRs[2].userEducation
       }
 
     } catch (error) {
@@ -84,18 +102,18 @@ const userService = () => {
   }
 
   UserService.updatePortfolioData = async (data) => {
-    const updateUserBasicInfo = (data) => { await models.User.createOrUpdateUser(data) },
-    updateSkillData = (dataList) => { await models.Skill.createOrUpdateFromList(dataList) },
-    updateEducationData = (dataList) => { await models.Education.createOrUpdateFromList(dataList) },
-    updateExperienceData = (dataList) => { await models.Experience.createOrUpdateFromList(dataList) },
-    updateGroupData = (dataList) => { await models.Group.createOrUpdateFromList(dataList) },
-    updateSchoolData = (dataList) => { await models.School.createOrUpdateFromList(dataList) },
+    const updateUserBasicInfo = async (data) => {  await models.User.createOrUpdateUser(data) },
+      updateSkillData = async (dataList) => { await models.Skill.createOrUpdateFromList(dataList) },
+      updateEducationData = async (dataList) => { await models.Education.createOrUpdateFromList(dataList) },
+      updateExperienceData = async (dataList) => { await models.Experience.createOrUpdateFromList(dataList) },
+      updateGroupData = async (dataList) => { await models.Group.createOrUpdateFromList(dataList) },
+      updateSchoolData = async (dataList) => { await models.School.createOrUpdateFromList(dataList) },
 
-    updateUserSkillData = (dataList) => { await models.UserSkill.createOrUpdateFromList(dataList) },
-    updateUserEducationData = (dataList) => { await models.UserEducation.createOrUpdateFromList(dataList) },
-    updateUserExperienceData = (dataList) => { await models.UserExperience.createOrUpdateFromList(dataList) },
-    updateGroupSkillData = (dataList) => { await models.GroupSkill.createOrUpdateFromList(dataList) },
-    updateEducationSchoolData = (dataList) => { await models.EducationSchool.createOrUpdateFromList(dataList) }
+      updateUserSkillData = async (dataList) => { await models.UserSkill.createOrUpdateFromList(dataList) },
+      updateUserEducationData = async (dataList) => { await models.UserEducation.createOrUpdateFromList(dataList) },
+      updateUserExperienceData = async (dataList) => { await models.UserExperience.createOrUpdateFromList(dataList) },
+      updateGroupSkillData = async (dataList) => { await models.GroupSkill.createOrUpdateFromList(dataList) },
+      updateEducationSchoolData = async (dataList) => { await models.EducationSchool.createOrUpdateFromList(dataList) }
 
     try {
       let listUpdateObjectFuntion = [

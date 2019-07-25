@@ -43,8 +43,6 @@ const models = {
   Group: sequelize.import('./group.model'),
   Experience: sequelize.import('./experience.model'),
   Education: sequelize.import('./education.model'),
-  Company: sequelize.import('./company.model'),
-  CompanyExperience: sequelize.import('./company_experience.model'),
   EducationSchool: sequelize.import('./education_school.model'),
   GroupSkill: sequelize.import('./group_skill.model'),
   UserEducation: sequelize.import('./user_education.model'),

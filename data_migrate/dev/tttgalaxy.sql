@@ -13,7 +13,7 @@ CREATE TABLE public.users
     "lastName" character varying(30)[] COLLATE pg_catalog."default",
     "comeFrom" text COLLATE pg_catalog."default",
     "birthDay" timestamp without time zone,
-    "profileImageUrl": text COLLATE pg_catalog."default",
+    "profileImageUrl":  text COLLATE pg_catalog."default",
     age bigint,
     phone character varying(15)[] COLLATE pg_catalog."default",
     "isDelete" boolean,
@@ -105,8 +105,6 @@ CREATE TABLE public.experiences
     "updatedAt" timestamp without time zone,
     title text COLLATE pg_catalog."default",
     description text COLLATE pg_catalog."default",
-    "from" timestamp without time zone,
-    "to" timestamp without time zone,
     "isPresent" boolean,
     "isDelete" boolean,
     CONSTRAINT experience_pkey PRIMARY KEY (id)
@@ -133,9 +131,6 @@ CREATE TABLE public.educations
     "updatedAt" timestamp without time zone,
     title text COLLATE pg_catalog."default",
     description text COLLATE pg_catalog."default",
-    "from" timestamp without time zone,
-    "to" timestamp without time zone,
-    "isPresent" boolean,
     "isDelete" boolean,
     CONSTRAINT educations_pkey PRIMARY KEY (id)
 )
@@ -146,80 +141,6 @@ TABLESPACE pg_default;
 
 ALTER TABLE public.educations
     OWNER to postgres;
-	
-	
--- Table: public.companies
-
--- DROP TABLE public.companies;
-
-CREATE TABLE public.companies
-(
-    id uuid NOT NULL,
-    name text COLLATE pg_catalog."default",
-    description text COLLATE pg_catalog."default",
-    "createdAt" timestamp without time zone,
-    "updatedAt" timestamp without time zone,
-    "isDelete" boolean,
-    CONSTRAINT companies_pkey PRIMARY KEY (id)
-)
-WITH (
-    OIDS = FALSE
-)
-TABLESPACE pg_default;
-
-ALTER TABLE public.companies
-    OWNER to postgres;
-	
--- Table: public.company_experience
-
--- DROP TABLE public.company_experience;
-
-CREATE TABLE public.company_experience
-(
-    id uuid NOT NULL,
-    "createdAt" timestamp without time zone,
-    "updatedAt" timestamp without time zone,
-    "isDelete" boolean,
-    "experienceId" uuid NOT NULL,
-    "companyId" uuid NOT NULL,
-    CONSTRAINT company_experience_pkey PRIMARY KEY (id),
-    CONSTRAINT "fk_companyExperience_company" FOREIGN KEY ("companyId")
-        REFERENCES public.companies (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
-    CONSTRAINT "fk_companyExperience_experience" FOREIGN KEY ("experienceId")
-        REFERENCES public.experiences (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-)
-WITH (
-    OIDS = FALSE
-)
-TABLESPACE pg_default;
-
-ALTER TABLE public.company_experience
-    OWNER to postgres;
-
-COMMENT ON CONSTRAINT "fk_companyExperience_company" ON public.company_experience
-    IS 'fk_companyExperience_company';
-
--- Index: fki_fk_companyExperience_company
-
--- DROP INDEX public."fki_fk_companyExperience_company";
-
-CREATE INDEX "fki_fk_companyExperience_company"
-    ON public.company_experience USING btree
-    ("companyId")
-    TABLESPACE pg_default;
-
--- Index: fki_fk_companyExperience_experience
-
--- DROP INDEX public."fki_fk_companyExperience_experience";
-
-CREATE INDEX "fki_fk_companyExperience_experience"
-    ON public.company_experience USING btree
-    ("experienceId")
-    TABLESPACE pg_default;
 	
 -- Table: public.education_school
 
@@ -331,7 +252,8 @@ CREATE TABLE public.user_education
     "updatedAt" timestamp without time zone,
     "isDelete" boolean,
     "userId" uuid NOT NULL,
-    "educationId" uuid NOT NULL,
+    "educationId" uuid NOT NULL, 
+    "duringTime" text COLLATE pg_catalog."default",
     CONSTRAINT user_education_pkey PRIMARY KEY (id),
     CONSTRAINT "fk_userEducation_education" FOREIGN KEY ("educationId")
         REFERENCES public.educations (id) MATCH SIMPLE
@@ -381,6 +303,7 @@ CREATE TABLE public.user_experience
     "updatedAt" timestamp without time zone,
     "userId" uuid NOT NULL,
     "experienceId" uuid NOT NULL,
+    "duringTime" text COLLATE pg_catalog."default",
     CONSTRAINT user_experience_pkey PRIMARY KEY (id),
     CONSTRAINT "fk_userExperience_experience" FOREIGN KEY ("experienceId")
         REFERENCES public.experiences (id) MATCH SIMPLE

@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
+const jwt = require('jsonwebtoken')
+const secret = "tttgalaxy-secret-key"
+
 const userService = require('./../services/user.service')
 
 /* GET users listing. */
@@ -20,14 +23,17 @@ router.post('/register', async function (req, res) {
 })
 
 router.get('/portfolio-data', async function (req, res) {
-  let decodedTokenData = jwt.verify(authorization, req.headers['x-access-token']);
-  console.log('req', req)
+  let decodedTokenData = jwt.verify(req.headers['x-access-token'], secret);
   let dataReq = {
     email: decodedTokenData.email,
     id: decodedTokenData.id
   }
-  console.log('decodedTokenData', decodedTokenData)
   let resultData = await userService.getUserData(dataReq)
+  return res.json(resultData)
+})
+
+router.post('/update-portfolio', async function (req, res) {
+  let resultData = await userService.updatePortfolioData(req.body)
   return res.json(resultData)
 })
 

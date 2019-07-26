@@ -1,4 +1,5 @@
 "use strict"
+const  _  = require('lodash')
 
 const user_skill = (sequelize, DataTypes) => {
   const UserSkill = sequelize.define('user_skill', {
@@ -55,6 +56,25 @@ const user_skill = (sequelize, DataTypes) => {
       return []
     }
   }
+
+  UserSkill.createOrUpdate = async (data) => {
+    try {
+      let obj = await UserSkill.findOne({ where: { id: data.id } })
+      if (obj) { // update
+        return await obj.update(data);
+      }
+      else { // insert
+        return await UserSkill.create({ id: uuidv1(), ...data });
+      }
+    } catch (error) {
+      return error
+    }
+  }
+
+  UserSkill.createOrUpdateFromList = async (dataList) => {
+    if (_.isArray(dataList) && !_.isEmpty(dataList)) Promise.all(dataList.map(data => UserSkill.createOrUpdate(data)))
+  }
+
 
   return UserSkill;
 };

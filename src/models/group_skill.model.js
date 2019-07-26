@@ -1,5 +1,7 @@
 "use strict"
 
+const  _  = require('lodash')
+
 const group_skill = (sequelize, DataTypes) => {
   const GroupSkill = sequelize.define('group_skill', {
     id: {
@@ -37,6 +39,25 @@ const group_skill = (sequelize, DataTypes) => {
       return []
     }
   }
+  
+  GroupSkill.createOrUpdate = async (data) => {
+    try {
+      let obj = await GroupSkill.findOne({ where: { id: data.id } })
+      if (obj) { // update
+        return await obj.update(data);
+      }
+      else { // insert
+        return await GroupSkill.create({ id: uuidv1(), ...data });
+      }
+    } catch (error) {
+      return error
+    }
+  }
+
+  GroupSkill.createOrUpdateFromList = async (dataList) => {
+    if (_.isArray(dataList) && !_.isEmpty(dataList)) Promise.all(dataList.map(data => GroupSkill.createOrUpdate(data)))
+  }
+
 
   return GroupSkill;
 };

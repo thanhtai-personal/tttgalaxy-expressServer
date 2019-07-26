@@ -127,13 +127,13 @@ const userService = () => {
         updateGroupSkillData(data.groupSkill),
         updateEducationSchoolData(data.educationSchool)
       ]
-
+      
       await Promise.all(listUpdateObjectFuntion)
       await Promise.all(listUpdateRelationFuntion)
 
       return {
         message: "updated data",
-        data: mappingData
+        data: data
       }
     } catch (error) {
       return {

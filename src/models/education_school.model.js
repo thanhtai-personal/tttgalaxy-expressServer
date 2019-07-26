@@ -1,4 +1,5 @@
 "use strict"
+const  _  = require('lodash')
 
 const education_school = (sequelize, DataTypes) => {
   const EducationSchool = sequelize.define('education_school', {
@@ -37,6 +38,25 @@ const education_school = (sequelize, DataTypes) => {
       return []
     }
   }
+
+  EducationSchool.createOrUpdate = async (data) => {
+    try {
+      let obj = await EducationSchool.findOne({ where: { id: data.id } })
+      if (obj) { // update
+        return await obj.update(data);
+      }
+      else { // insert
+        return await EducationSchool.create({ id: uuidv1(), ...data });
+      }
+    } catch (error) {
+      return error
+    }
+  }
+
+  EducationSchool.createOrUpdateFromList = async (dataList) => {
+    if (_.isArray(dataList) && !_.isEmpty(dataList)) Promise.all(dataList.map(data => EducationSchool.createOrUpdate(data)))
+  }
+
 
   return EducationSchool;
 };

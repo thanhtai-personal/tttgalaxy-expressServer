@@ -1,12 +1,12 @@
-const { models, sequelize } = require('./../models');
+const { models, sequelize } = require('../models');
 const jwt = require('jsonwebtoken')
 const _ = require('lodash')
 
-const userService = () => {
-  let UserService = {
+const portfolioService = () => {
+  let PortfolioService = {
     secret: "tttgalaxy-secret-key"
   }
-  UserService.login = async (data) => {
+  PortfolioService.login = async (data) => {
     let user = await models.User.findByEmail(data.email);
     if (user) {
       if (user.password === data.password) {
@@ -29,22 +29,7 @@ const userService = () => {
     }
   }
 
-  UserService.addOrUpdate = async (data) => {
-    let user = await models.User.findByEmail(data.email)
-    if (!user) {
-      let user = await models.User.createOrUpdateUser(data)
-      return {
-        message: 'created user',
-        data: user
-      }
-    } else {
-      return {
-        message: 'user is existed'
-      }
-    }
-  }
-
-  UserService.getUserData = async (data) => {
+  PortfolioService.getPortfolioData = async (data) => {
     //need to use join db
     try {
       let user = await models.User.findByEmail(data.email)
@@ -96,7 +81,7 @@ const userService = () => {
     }
   }
 
-  UserService.updatePortfolioData = async (data) => {
+  PortfolioService.updatePortfolioData = async (data) => {
     const updateUserBasicInfo = async (data) => {  await models.User.createOrUpdateUser(data) },
       updateSkillData = async (dataList) => { await models.Skill.createOrUpdateFromList(dataList) },
       updateEducationData = async (dataList) => { await models.Education.createOrUpdateFromList(dataList) },
@@ -133,7 +118,7 @@ const userService = () => {
 
       return {
         message: "updated data",
-        data: data
+        data: {}
       }
     } catch (error) {
       return {
@@ -143,7 +128,7 @@ const userService = () => {
     }
   }
 
-  return UserService
+  return PortfolioService
 }
 
-module.exports = userService()
+module.exports = portfolioService()

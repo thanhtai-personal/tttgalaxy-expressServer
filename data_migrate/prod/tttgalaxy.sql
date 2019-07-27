@@ -9,13 +9,12 @@ CREATE TABLE public.users
     password text COLLATE pg_catalog."default" NOT NULL,
     "createdAt" timestamp without time zone,
     "updatedAt" timestamp without time zone,
-    "firstName" character varying(30)[] COLLATE pg_catalog."default",
-    "lastName" character varying(30)[] COLLATE pg_catalog."default",
+    "name" text COLLATE pg_catalog."default",
     "comeFrom" text COLLATE pg_catalog."default",
     "birthDay" timestamp without time zone,
     "profileImageUrl" text COLLATE pg_catalog."default",
     age bigint,
-    phone character varying(15)[] COLLATE pg_catalog."default",
+    phone text COLLATE pg_catalog."default",
     "isDelete" boolean,
     CONSTRAINT user_pkey PRIMARY KEY (id)
 )
@@ -37,7 +36,7 @@ CREATE TABLE public.skills
     "createdAt" timestamp without time zone,
     "updatedAt" timestamp without time zone,
     "isDelete" boolean,
-    name character varying(128) COLLATE pg_catalog."default",
+    name text COLLATE pg_catalog."default",
     description text COLLATE pg_catalog."default",
     CONSTRAINT skills_pkey PRIMARY KEY (id)
 )
@@ -81,7 +80,7 @@ CREATE TABLE public."group"
     "createdAt" timestamp without time zone,
     "updatedAt" timestamp without time zone,
     "isDelete" boolean,
-    name character varying(128) COLLATE pg_catalog."default",
+    name text COLLATE pg_catalog."default",
     description text COLLATE pg_catalog."default",
     CONSTRAINT group_pkey PRIMARY KEY (id)
 )
@@ -100,7 +99,7 @@ ALTER TABLE public."group"
 CREATE TABLE public.experiences
 (
     id uuid NOT NULL,
-    name character varying(128)[] COLLATE pg_catalog."default",
+    name text COLLATE pg_catalog."default",
     "createdAt" timestamp without time zone,
     "updatedAt" timestamp without time zone,
     title text COLLATE pg_catalog."default",
@@ -126,7 +125,7 @@ ALTER TABLE public.experiences
 CREATE TABLE public.educations
 (
     id uuid NOT NULL,
-    name character varying(128)[] COLLATE pg_catalog."default",
+    name text COLLATE pg_catalog."default",
     "createdAt" timestamp without time zone,
     "updatedAt" timestamp without time zone,
     title text COLLATE pg_catalog."default",

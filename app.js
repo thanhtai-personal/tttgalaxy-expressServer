@@ -6,8 +6,8 @@ const logger = require('morgan');
 
 const jwt = require('jsonwebtoken')
 
-const indexRouter = require('./src/controllers/index');
-const usersRouter = require('./src/controllers/users');
+const authRouter = require('./src/controllers/auth.controller');
+const portfolioRouter = require('./src/controllers/portfolio.controller');
 
 const cors = require('cors')
 
@@ -15,8 +15,8 @@ var app = express();
 
 
 const publicAPIs = [
-  '/api/users/login',
-  '/api/users/register'
+  '/api/auth/login',
+  '/api/auth/register'
 ]
 const secret = "tttgalaxy-secret-key"
 
@@ -68,8 +68,8 @@ app.use(checkAuthenticate)
 app.use(express.static(path.join(__dirname, 'client/build')));
 
 
-app.use('/', indexRouter);
-app.use('/api/users', usersRouter);
+app.use('/api/portfolio', portfolioRouter);
+app.use('/api/auth', authRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -32,8 +32,8 @@ const user = (sequelize, DataTypes) => {
     comeFrom: {
       type: DataTypes.STRING
     },
-    birthDay: {
-      type: DataTypes.DATEONLY
+    birthDate: {
+      type: DataTypes.DATE
     },
     age: {
       type: DataTypes.INTEGER
@@ -63,10 +63,16 @@ const user = (sequelize, DataTypes) => {
     try {
       let user = await User.findOne({ where: { email: model.email } })
       if (user) { // update
-        return await user.update(model);
+        try {
+          await user.update(model);
+        } catch (error) {
+          console.log('error', error)
+        }
       }
       else { // insert
-        return await User.create({ id: uuidv1(), email: model.email, password: model.password });
+        await User.create({ id: uuidv1(), email: model.email, password: model.password });
+        user = await User.findOne({ where: { email: model.email } })
+        return user
       }
     } catch (error) {
       return error

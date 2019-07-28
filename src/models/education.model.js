@@ -1,5 +1,6 @@
 "use strict"
 const  _  = require('lodash')
+const uuidv1 = require('uuid/v1')
 
 const education = (sequelize, DataTypes) => {
   const Education = sequelize.define('educations', {
@@ -11,7 +12,7 @@ const education = (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING
     },
-    descriptions: {
+    description: {
       type: DataTypes.STRING
     },
     title: {
@@ -35,12 +36,14 @@ const education = (sequelize, DataTypes) => {
     isPresent: {
       type: DataTypes.BOOLEAN
     }
+  }, {
+    freezeTableName: true
   });
 
   Education.findByIds = async (ids) => {
     try {
       return await Education.findAll({
-        where: { id: {in: ids} }
+        where: { id: ids }
       })
     } catch (error) {
       return []
@@ -62,7 +65,11 @@ const education = (sequelize, DataTypes) => {
   }
 
   Education.createOrUpdateFromList = async (dataList) => {
-    if (_.isArray(dataList) && !_.isEmpty(dataList)) Promise.all(dataList.map(data => Education.createOrUpdate(data)))
+    try {
+      if (_.isArray(dataList) && !_.isEmpty(dataList)) Promise.all(dataList.map(data => Education.createOrUpdate(data)))
+    } catch (error) {
+      console.log('error', error)
+    }
   }
 
 

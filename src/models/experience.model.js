@@ -1,5 +1,6 @@
 "use strict"
 const  _  = require('lodash')
+const uuidv1 = require('uuid/v1')
 
 const experience = (sequelize, DataTypes) => {
   const Experience = sequelize.define('experiences', {
@@ -11,7 +12,7 @@ const experience = (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING
     },
-    descriptions: {
+    description: {
       type: DataTypes.STRING
     },
     title: {
@@ -26,6 +27,8 @@ const experience = (sequelize, DataTypes) => {
     isDelete: {
       type: DataTypes.BOOLEAN
     }
+  }, {
+    freezeTableName: true
   });
 
   Experience.createOrUpdate = async (data) => {
@@ -43,7 +46,24 @@ const experience = (sequelize, DataTypes) => {
   }
 
   Experience.createOrUpdateFromList = async (dataList) => {
-    if (_.isArray(dataList) && !_.isEmpty(dataList)) Promise.all(dataList.map(data => Experience.createOrUpdate(data)))
+    try {
+      if (_.isArray(dataList) && !_.isEmpty(dataList)) Promise.all(dataList.map(data => Experience.createOrUpdate(data)))
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
+  Experience.findByIds = async (ids) => {
+    try {
+      let dataRs = await Experience.findAll({
+        where: { id: ids },
+        raw: true
+      })
+      return dataRs
+    } catch (error) {
+      console.log('error', error)
+      return []
+    }
   }
 
 

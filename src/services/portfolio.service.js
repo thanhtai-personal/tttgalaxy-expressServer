@@ -35,28 +35,43 @@ const portfolioService = () => {
       let user = await models.User.findByEmail(data.email)
       user.password = null
       const getSkill = async (userId) => {
-        let skillIds = await models.UserSkill.findSkillIdsByUserId(userId)
-        let userSkill = await models.UserSkill.findByUserId(userId)
-        let skill = await models.Skill.findByIds(skillIds)
-        let groupIds = await models.GroupSkill.findGroupIdsBySkillIds(skillIds)
-        let group = await models.Group.findByIds(groupIds)
-        return { skill, group, userSkill }
+        try {
+          let skillIds = await models.UserSkill.findSkillIdsByUserId(userId)
+          let userSkill = await models.UserSkill.findByUserId(userId)
+          let skill = await models.Skill.findByIds(skillIds)
+          let groupSkill = await models.GroupSkill.findBySkillIds(skillIds)
+          let groupIds = groupSkill.map(gs => gs.groupId)
+          let group = await models.Group.findByIds(groupIds)
+          return { skill, group, userSkill, groupSkill }
+        } catch (error) {
+          console.log('getSkill error', error)
+        }
+
       }
 
       const getExperience = async (userId) => {
-        let experienceIds = await models.UserExperience.findExperienceIdsByUserId(userId)
-        let userExperience = await models.UserExperience.findByUserId(userId)
-        let experience = await models.Skill.findByIds(experienceIds)
-        return { experience, userExperience }
+        try {
+          let userExperience = await models.UserExperience.findByUserId(userId)
+          let experienceIds = userExperience.map((uExp) => uExp.experienceId)
+          let experience = await models.Experience.findByIds(experienceIds)
+          return { experience, userExperience }
+        } catch (error) {
+          console.log('getExperience error', error)
+        }
       }
 
       const getEducation = async (userId) => {
-        let educationIds = await models.UserEducation.findEducationIdsByUserId(userId)
-        let userEducation = await models.UserEducation.findByUserId(userId)
-        let education = await models.Skill.findByIds(educationIds)
-        let schoolIds = await models.EducationSchool.findSchoolIdsByEducationIds(educationIds)
-        let school = await models.School.findByIds(schoolIds)
-        return { education, school, userEducation }
+        try {
+          let educationIds = await models.UserEducation.findEducationIdsByUserId(userId)
+          let userEducation = await models.UserEducation.findByUserId(userId)
+          let education = await models.Skill.findByIds(educationIds)
+          let educationSchool = await models.EducationSchool.findByEducationIds(educationIds)
+          let schoolIds = educationSchool.map(es => es.schoolId)
+          let school = await models.School.findByIds(schoolIds)
+          return { education, school, userEducation, educationSchool }
+        } catch (error) {
+          console.log('getEducation error', error)
+        }
       }
 
       let dataRs = await Promise.all([getSkill(user.id), getExperience(user.id), getEducation(user.id)])
@@ -66,23 +81,21 @@ const portfolioService = () => {
         skill: dataRs[0].skill,
         group: dataRs[0].group,
         userSkill: dataRs[0].userSkill,
+        groupSkill: dataRs[0].groupSkill,
         experiences: dataRs[1].experience,
         userExperience: dataRs[1].userExperience,
         education: dataRs[2].education,
         school: dataRs[2].school,
+        educationSchool: dataRs[2].educationSchool,
         userEducation: dataRs[2].userEducation
       }
-
     } catch (error) {
-      return {
-        message: 'catch error!!',
-        data: error
-      }
+      console.log('findByEmail error', error)
     }
   }
 
   PortfolioService.updatePortfolioData = async (data) => {
-    const updateUserBasicInfo = async (data) => {  await models.User.createOrUpdateUser(data) },
+    const updateUserBasicInfo = async (data) => { await models.User.createOrUpdateUser(data) },
       updateSkillData = async (dataList) => { await models.Skill.createOrUpdateFromList(dataList) },
       updateEducationData = async (dataList) => { await models.Education.createOrUpdateFromList(dataList) },
       updateExperienceData = async (dataList) => { await models.Experience.createOrUpdateFromList(dataList) },
@@ -112,7 +125,7 @@ const portfolioService = () => {
         updateGroupSkillData(data.groupSkill),
         updateEducationSchoolData(data.educationSchool)
       ]
-      
+
       await Promise.all(listUpdateObjectFuntion)
       await Promise.all(listUpdateRelationFuntion)
 

@@ -1,5 +1,6 @@
 "use strict"
 const  _  = require('lodash')
+const uuidv1 = require('uuid/v1')
 
 const user_skill = (sequelize, DataTypes) => {
   const UserSkill = sequelize.define('user_skill', {
@@ -28,25 +29,30 @@ const user_skill = (sequelize, DataTypes) => {
     progress: {
       type: DataTypes.INTEGER
     }
+  }, {
+    freezeTableName: true
   });
 
   UserSkill.findSkillIdsByUserId = async (userId) => {
     try {
-      let ids = await UserSkill.find({
-        select: 'skillId',
+      let ids = await UserSkill.findAll({
+        attributes: ['skillId'],
         where: {
           userId: userId
-        }
+        },
+        raw: true,
       })
-      return ids
+      let listSkillIds = ids.map(idObj => idObj.skillId)
+      return listSkillIds
     } catch (error) {
+      console.log('error findSkillIdsByUserId', error)
       return []
     }
   }
 
   UserSkill.findByUserId = async (userId) => {
     try {
-      let rs =  await UserSkill.find({
+      let rs =  await UserSkill.findAll({
         where: {
           userId: userId
         }
@@ -59,7 +65,7 @@ const user_skill = (sequelize, DataTypes) => {
 
   UserSkill.createOrUpdate = async (data) => {
     try {
-      let obj = await UserSkill.findOne({ where: { id: data.id } })
+      let obj = await UserSkill.findOne({ where: { userId: data.userId, skillId: data.skillId } })
       if (obj) { // update
         return await obj.update(data);
       }
@@ -72,7 +78,12 @@ const user_skill = (sequelize, DataTypes) => {
   }
 
   UserSkill.createOrUpdateFromList = async (dataList) => {
-    if (_.isArray(dataList) && !_.isEmpty(dataList)) Promise.all(dataList.map(data => UserSkill.createOrUpdate(data)))
+    try {
+      if (_.isArray(dataList) && !_.isEmpty(dataList)) Promise.all(dataList.map(data => UserSkill.createOrUpdate(data)))
+    } catch (error) {
+      console.log('error', error)
+    }
+    
   }
 
 

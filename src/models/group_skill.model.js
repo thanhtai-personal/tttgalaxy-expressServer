@@ -1,6 +1,7 @@
 "use strict"
 
 const  _  = require('lodash')
+const uuidv1 = require('uuid/v1')
 
 const group_skill = (sequelize, DataTypes) => {
   const GroupSkill = sequelize.define('group_skill', {
@@ -26,23 +27,29 @@ const group_skill = (sequelize, DataTypes) => {
     isDelete: {
       type: DataTypes.BOOLEAN
     }
+  }, {
+    freezeTableName: true
   });
 
-  GroupSkill.findGroupIdsBySkillIds = async (skillIds) => {
+  GroupSkill.findBySkillIds = async (skillIds) => {
     try {
-      let ids = await GroupSkill.findAll({
-        //select: 'groupId',
-        where: { skillId: { in: skillIds } }
+      if (_.isNil(skillIds) || _.isEmpty(skillIds)) return []
+      let dataRs = await GroupSkill.findAll({
+        where: {
+          skillId: skillIds
+        },
+        raw: true,
       })
-      return ids
+      return dataRs
     } catch (error) {
+      console.log('error findBySkillIds', error)
       return []
     }
   }
   
   GroupSkill.createOrUpdate = async (data) => {
     try {
-      let obj = await GroupSkill.findOne({ where: { id: data.id } })
+      let obj = await GroupSkill.findOne({ where: { groupId: data.groupId, skillId: data.skillId } })
       if (obj) { // update
         return await obj.update(data);
       }

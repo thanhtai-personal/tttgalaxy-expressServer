@@ -1,5 +1,6 @@
 "use strict"
 const  _  = require('lodash')
+const uuidv1 = require('uuid/v1')
 
 const group = (sequelize, DataTypes) => {
   const Group = sequelize.define('group', {
@@ -11,7 +12,7 @@ const group = (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING
     },
-    descriptions: {
+    description: {
       type: DataTypes.STRING
     },
     createdAt: {
@@ -23,14 +24,18 @@ const group = (sequelize, DataTypes) => {
     isDelete: {
       type: DataTypes.BOOLEAN
     }
+  }, {
+    freezeTableName: true
   });
 
   Group.findByIds = async (ids) => {
     try {
       return await Group.findAll({
-        where: { id: {in: ids} }
+        where: { id: ids },
+        raw: true
       })
     } catch (error) {
+      console.log('error', error)
       return []
     }
   }
@@ -50,7 +55,11 @@ const group = (sequelize, DataTypes) => {
   }
 
   Group.createOrUpdateFromList = async (dataList) => {
-    if (_.isArray(dataList) && !_.isEmpty(dataList)) Promise.all(dataList.map(data => Group.createOrUpdate(data)))
+    try {
+      if (_.isArray(dataList) && !_.isEmpty(dataList)) Promise.all(dataList.map(data => Group.createOrUpdate(data)))
+    } catch (error) {
+      console.log('error', error)
+    }
   }
 
 

@@ -1,5 +1,6 @@
 "use strict"
 const  _  = require('lodash')
+const uuidv1 = require('uuid/v1')
 
 
 const skill = (sequelize, DataTypes) => {
@@ -12,7 +13,7 @@ const skill = (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING
     },
-    descriptions: {
+    description: {
       type: DataTypes.STRING
     },
     createdAt: {
@@ -24,14 +25,19 @@ const skill = (sequelize, DataTypes) => {
     isDelete: {
       type: DataTypes.BOOLEAN
     }
+  }, {
+    freezeTableName: true
   });
   
   Skill.findByIds = async (ids) => {
     try {
-      return await Skill.findAll({
-        where: { id: {in: ids} }
+      let dataRs = await Skill.findAll({
+        where: { id: ids },
+        raw: true
       })
+      return dataRs
     } catch (error) {
+      console.log('error', error)
       return []
     }
   }
@@ -41,17 +47,22 @@ const skill = (sequelize, DataTypes) => {
       let obj = await Skill.findOne({ where: { id: data.id } })
       if (obj) { // update
         return await obj.update(data);
-      }
-      else { // insert
+      } else { // insert
         return await Skill.create({ id: uuidv1(), ...data });
       }
     } catch (error) {
+      console.log('error', error)
       return error
     }
   }
 
   Skill.createOrUpdateFromList = async (dataList) => {
-    if (_.isArray(dataList) && !_.isEmpty(dataList)) Promise.all(dataList.map(data => Skill.createOrUpdate(data)))
+    try {
+      if (_.isArray(dataList) && !_.isEmpty(dataList)) Promise.all(dataList.map(data => Skill.createOrUpdate(data)))
+    } catch (error) {
+      console.log('error', error)
+    }
+    
   }
 
   return Skill;

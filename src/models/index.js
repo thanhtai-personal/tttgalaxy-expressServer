@@ -19,7 +19,7 @@ if (process.env.NODE_ENV === "production") {
     protocol: 'postgres',
     port: 5432,
     host: 'ec2-50-19-231-222.compute-1.amazonaws.com',
-    logging:  true //false
+    logging:  true, //false
   })
 } else {
   sequelize = new Sequelize(

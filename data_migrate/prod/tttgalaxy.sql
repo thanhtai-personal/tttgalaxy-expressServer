@@ -11,7 +11,7 @@ CREATE TABLE public.users
     "updatedAt" timestamp without time zone,
     "name" text COLLATE pg_catalog."default",
     "comeFrom" text COLLATE pg_catalog."default",
-    "birthDay" timestamp without time zone,
+    "birthDate" timestamp without time zone,
     "profileImageUrl" text COLLATE pg_catalog."default",
     age bigint,
     phone text COLLATE pg_catalog."default",

@@ -1,5 +1,6 @@
 "use strict"
 const  _  = require('lodash')
+const uuidv1 = require('uuid/v1')
 
 const user_education = (sequelize, DataTypes) => {
   const UserEducation = sequelize.define('user_education', {
@@ -25,17 +26,19 @@ const user_education = (sequelize, DataTypes) => {
     isDelete: {
       type: DataTypes.BOOLEAN
     }
+  }, {
+    freezeTableName: true
   });
 
   UserEducation.findEducationIdsByUserId = async (userId) => {
     try {
-      let ids = await UserEducation.find({
-        select: 'educationId',
+      let ids = await UserEducation.findAll({
+        attributes: ['educationId'],
         where: {
           userId: userId
         }
       })
-      return ids
+      return ids.map(idObj => idObj.educationId)
     } catch (error) {
       return []
     }
@@ -44,7 +47,7 @@ const user_education = (sequelize, DataTypes) => {
   
   UserEducation.findByUserId = async (userId) => {
     try {
-      return await UserEducation.find({
+      return await UserEducation.findAll({
         where: {
           userId: userId
         }
@@ -56,7 +59,7 @@ const user_education = (sequelize, DataTypes) => {
 
   UserEducation.createOrUpdate = async (data) => {
     try {
-      let obj = await UserEducation.findOne({ where: { id: data.id } })
+      let obj = await UserEducation.findOne({ where: { userId: data.userId, educationId: data.educationId } })
       if (obj) { // update
         return await obj.update(data);
       }

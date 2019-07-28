@@ -44,6 +44,8 @@ const user = (sequelize, DataTypes) => {
     isDelete: {
       type: DataTypes.BOOLEAN
     }
+  }, {
+    freezeTableName: true
   });
 
   User.findByEmail = async email => {

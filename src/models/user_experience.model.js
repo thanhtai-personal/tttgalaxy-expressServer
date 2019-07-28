@@ -1,5 +1,6 @@
 "use strict"
 const  _  = require('lodash')
+const uuidv1 = require('uuid/v1')
 
 const user_experience = (sequelize, DataTypes) => {
   const UserExperience = sequelize.define('user_experience', {
@@ -24,13 +25,36 @@ const user_experience = (sequelize, DataTypes) => {
     },
     isDelete: {
       type: DataTypes.BOOLEAN
+    },
+    description: {
+      type: DataTypes.STRING
+    },
+    duringTime: {
+      type: DataTypes.STRING
     }
+  }, {
+    freezeTableName: true
   });
   
   UserExperience.findExperienceIdsByUserId = async (userId) => {
     try {
-      let ids = await UserExperience.find({
-        select: 'experienceId',
+      let ids = await UserExperience.findAll({
+        attributes: ['experienceId'],
+        where: {
+          userId: userId
+        },
+        raw: true
+      })
+      return ids.map(idObj => idObj.experienceId)
+    } catch (error) {
+      console.log('error', error)
+      return []
+    }
+  }
+
+  UserExperience.findByUserId = async (userId) => {
+    try {
+      let ids = await UserExperience.findAll({
         where: {
           userId: userId
         }
@@ -41,21 +65,9 @@ const user_experience = (sequelize, DataTypes) => {
     }
   }
 
-  UserExperience.findByUserId = async (userId) => {
-    try {
-      return await UserExperience.find({
-        where: {
-          userId: userId
-        }
-      })
-    } catch (error) {
-      return []
-    }
-  }
-
   UserExperience.createOrUpdate = async (data) => {
     try {
-      let obj = await UserExperience.findOne({ where: { id: data.id } })
+      let obj = await UserExperience.findOne({ where: { userId: data.userId, experienceId: data.experienceId } })
       if (obj) { // update
         return await obj.update(data);
       }

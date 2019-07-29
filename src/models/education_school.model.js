@@ -36,7 +36,8 @@ const education_school = (sequelize, DataTypes) => {
       if (_.isNil(educationIds) || _.isEmpty(educationIds)) return []
       let dataRs = await EducationSchool.findAll({
         where: {
-          educationId: educationIds
+          educationId: educationIds,
+          isDelete: false
         },
         raw: true,
       })
@@ -49,7 +50,12 @@ const education_school = (sequelize, DataTypes) => {
 
   EducationSchool.createOrUpdate = async (data) => {
     try {
-      let obj = await EducationSchool.findOne({ where: { educationId: data.educationId, schoolId: data.schoolId } })
+      let obj = await EducationSchool.findOne({ 
+        where: { 
+          educationId: data.educationId,
+          schoolId: data.schoolId,
+          isDelete: false 
+        } })
       if (obj) { // update
         return await obj.update(data);
       }

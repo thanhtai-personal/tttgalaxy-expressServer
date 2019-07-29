@@ -32,7 +32,7 @@ const skill = (sequelize, DataTypes) => {
   Skill.findByIds = async (ids) => {
     try {
       let dataRs = await Skill.findAll({
-        where: { id: ids },
+        where: { id: ids, isDelete: false },
         raw: true
       })
       return dataRs
@@ -44,7 +44,7 @@ const skill = (sequelize, DataTypes) => {
 
   Skill.createOrUpdate = async (data) => {
     try {
-      let obj = await Skill.findOne({ where: { id: data.id } })
+      let obj = await Skill.findOne({ where: { id: data.id, isDelete: false } })
       if (obj) { // update
         return await obj.update(data);
       } else { // insert

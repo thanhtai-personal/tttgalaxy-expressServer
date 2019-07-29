@@ -12,9 +12,6 @@ const experience = (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING
     },
-    description: {
-      type: DataTypes.STRING
-    },
     title: {
       type: DataTypes.STRING
     },
@@ -33,7 +30,7 @@ const experience = (sequelize, DataTypes) => {
 
   Experience.createOrUpdate = async (data) => {
     try {
-      let obj = await Experience.findOne({ where: { id: data.id } })
+      let obj = await Experience.findOne({ where: { id: data.id, isDelete: false }, raw: true })
       if (obj) { // update
         return await obj.update(data);
       }
@@ -41,6 +38,7 @@ const experience = (sequelize, DataTypes) => {
         return await Experience.create({ id: uuidv1(), ...data });
       }
     } catch (error) {
+      console.log('error', error)
       return error
     }
   }
@@ -56,7 +54,7 @@ const experience = (sequelize, DataTypes) => {
   Experience.findByIds = async (ids) => {
     try {
       let dataRs = await Experience.findAll({
-        where: { id: ids },
+        where: { id: ids, isDelete: false },
         raw: true
       })
       return dataRs

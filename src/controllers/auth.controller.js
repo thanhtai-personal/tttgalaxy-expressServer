@@ -3,6 +3,7 @@ const express = require('express');
 var router = express.Router();
 const secret = "tttgalaxy-secret-key"
 const jwt = require('jsonwebtoken')
+const _ = require('lodash')
 
 const authService = require('./../services/auth.service')
 
@@ -26,7 +27,11 @@ router.post('/register', async function (req, res) {
 router.get('/get-current-user', async function (req, res) {
   try {
     let decodedTokenData = jwt.verify(req.headers['x-access-token'], secret);
-    return res.json(decodedTokenData)
+    let user = await authService.getUserData(decodedTokenData)
+    if (_.isNil(user)) {
+      return res.send({error: createError(404), data: { message: 'no user found'}})
+    }
+    return res.json(user)
   } catch (error) {
     return res.send({error: createError(401), data: error})
   }

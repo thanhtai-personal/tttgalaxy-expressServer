@@ -31,7 +31,7 @@ const group = (sequelize, DataTypes) => {
   Group.findByIds = async (ids) => {
     try {
       return await Group.findAll({
-        where: { id: ids },
+        where: { id: ids, isDelete: false },
         raw: true
       })
     } catch (error) {
@@ -42,7 +42,7 @@ const group = (sequelize, DataTypes) => {
 
   Group.createOrUpdate = async (data) => {
     try {
-      let obj = await Group.findOne({ where: { id: data.id } })
+      let obj = await Group.findOne({ where: { id: data.id, isDelete: false } })
       if (obj) { // update
         return await obj.update(data);
       }

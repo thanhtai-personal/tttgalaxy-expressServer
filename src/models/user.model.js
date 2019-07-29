@@ -52,7 +52,7 @@ const user = (sequelize, DataTypes) => {
     let user
     try {
       user = await User.findOne({
-        where: { email: email },
+        where: { email: email, isDelete: false },
       });
     } catch (error) {
       console.error('User.findOne email error', error)
@@ -63,7 +63,7 @@ const user = (sequelize, DataTypes) => {
 
   User.createOrUpdateUser = async model => {
     try {
-      let user = await User.findOne({ where: { email: model.email } })
+      let user = await User.findOne({ where: { email: model.email, isDelete: false } })
       if (user) { // update
         try {
           await user.update(model);
@@ -73,7 +73,7 @@ const user = (sequelize, DataTypes) => {
       }
       else { // insert
         await User.create({ id: uuidv1(), email: model.email, password: model.password });
-        user = await User.findOne({ where: { email: model.email } })
+        user = await User.findOne({ where: { email: model.email, isDelete: false } })
         return user
       }
     } catch (error) {

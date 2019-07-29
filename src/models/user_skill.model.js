@@ -38,7 +38,7 @@ const user_skill = (sequelize, DataTypes) => {
       let ids = await UserSkill.findAll({
         attributes: ['skillId'],
         where: {
-          userId: userId
+          userId: userId, isDelete: false
         },
         raw: true,
       })
@@ -54,7 +54,7 @@ const user_skill = (sequelize, DataTypes) => {
     try {
       let rs =  await UserSkill.findAll({
         where: {
-          userId: userId
+          userId: userId, isDelete: false
         }
       })
       return rs
@@ -65,7 +65,7 @@ const user_skill = (sequelize, DataTypes) => {
 
   UserSkill.createOrUpdate = async (data) => {
     try {
-      let obj = await UserSkill.findOne({ where: { userId: data.userId, skillId: data.skillId } })
+      let obj = await UserSkill.findOne({ where: { userId: data.userId, skillId: data.skillId, isDelete: false } })
       if (obj) { // update
         return await obj.update(data);
       }

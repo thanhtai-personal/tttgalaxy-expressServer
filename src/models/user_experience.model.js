@@ -41,7 +41,7 @@ const user_experience = (sequelize, DataTypes) => {
       let ids = await UserExperience.findAll({
         attributes: ['experienceId'],
         where: {
-          userId: userId
+          userId: userId, isDelete: false
         },
         raw: true
       })
@@ -57,7 +57,7 @@ const user_experience = (sequelize, DataTypes) => {
       console.log("try findByUserId")
       let ids = await UserExperience.findAll({
         where: {
-          userId: userId
+          userId: userId, isDelete: false
         }
       })
       return ids
@@ -69,7 +69,7 @@ const user_experience = (sequelize, DataTypes) => {
 
   UserExperience.createOrUpdate = async (data) => {
     try {
-      let obj = await UserExperience.findOne({ where: { userId: data.userId, experienceId: data.experienceId } })
+      let obj = await UserExperience.findOne({ where: { userId: data.userId, experienceId: data.experienceId, isDelete: false } })
       if (obj) { // update
         return await obj.update(data);
       }

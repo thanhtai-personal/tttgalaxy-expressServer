@@ -36,7 +36,7 @@ const group_skill = (sequelize, DataTypes) => {
       if (_.isNil(skillIds) || _.isEmpty(skillIds)) return []
       let dataRs = await GroupSkill.findAll({
         where: {
-          skillId: skillIds
+          skillId: skillIds, isDelete: false
         },
         raw: true,
       })
@@ -49,7 +49,7 @@ const group_skill = (sequelize, DataTypes) => {
   
   GroupSkill.createOrUpdate = async (data) => {
     try {
-      let obj = await GroupSkill.findOne({ where: { groupId: data.groupId, skillId: data.skillId } })
+      let obj = await GroupSkill.findOne({ where: { groupId: data.groupId, skillId: data.skillId, isDelete: false } })
       if (obj) { // update
         return await obj.update(data);
       }

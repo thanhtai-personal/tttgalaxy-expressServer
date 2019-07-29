@@ -41,7 +41,7 @@ const user_education = (sequelize, DataTypes) => {
     try {
       return await UserEducation.findAll({
         where: {
-          userId: userId
+          userId: userId, isDelete: false
         },
         raw: true
       })
@@ -53,7 +53,7 @@ const user_education = (sequelize, DataTypes) => {
 
   UserEducation.createOrUpdate = async (data) => {
     try {
-      let obj = await UserEducation.findOne({ where: { userId: data.userId, educationId: data.educationId } })
+      let obj = await UserEducation.findOne({ where: { userId: data.userId, educationId: data.educationId, isDelete: false } })
       if (obj) { // update
         return await obj.update(data);
       }

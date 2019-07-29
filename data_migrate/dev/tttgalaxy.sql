@@ -15,7 +15,7 @@ CREATE TABLE public.users
     "profileImageUrl" text COLLATE pg_catalog."default",
     age bigint,
     phone text COLLATE pg_catalog."default",
-    "isDelete" boolean,
+    "isDelete" boolean  default false,
     CONSTRAINT user_pkey PRIMARY KEY (id)
 )
 WITH (
@@ -35,7 +35,7 @@ CREATE TABLE public.skills
     id uuid NOT NULL,
     "createdAt" timestamp without time zone,
     "updatedAt" timestamp without time zone,
-    "isDelete" boolean,
+    "isDelete" boolean  default false,
     name text COLLATE pg_catalog."default",
     description text COLLATE pg_catalog."default",
     CONSTRAINT skills_pkey PRIMARY KEY (id)
@@ -58,7 +58,7 @@ CREATE TABLE public.schools
     name text COLLATE pg_catalog."default",
     "createdAt" timestamp without time zone,
     "updatedAt" timestamp without time zone,
-    "isDelete" boolean,
+    "isDelete" boolean  default false,
     description text COLLATE pg_catalog."default",
     CONSTRAINT schools_pkey PRIMARY KEY (id)
 )
@@ -79,7 +79,7 @@ CREATE TABLE public."group"
     id uuid NOT NULL,
     "createdAt" timestamp without time zone,
     "updatedAt" timestamp without time zone,
-    "isDelete" boolean,
+    "isDelete" boolean  default false,
     name text COLLATE pg_catalog."default",
     description text COLLATE pg_catalog."default",
     CONSTRAINT group_pkey PRIMARY KEY (id)
@@ -104,7 +104,7 @@ CREATE TABLE public.experiences
     "updatedAt" timestamp without time zone,
     title text COLLATE pg_catalog."default",
     "isPresent" boolean,
-    "isDelete" boolean,
+    "isDelete" boolean  default false,
     CONSTRAINT experience_pkey PRIMARY KEY (id)
 )
 WITH (
@@ -128,7 +128,7 @@ CREATE TABLE public.educations
     "createdAt" timestamp without time zone,
     "updatedAt" timestamp without time zone,
     title text COLLATE pg_catalog."default",
-    "isDelete" boolean,
+    "isDelete" boolean  default false,
     CONSTRAINT educations_pkey PRIMARY KEY (id)
 )
 WITH (
@@ -148,7 +148,7 @@ CREATE TABLE public.education_school
     id uuid NOT NULL,
     "createdAt" timestamp without time zone,
     "updatedAt" timestamp without time zone,
-    "isDelete" timestamp without time zone,
+    "isDelete" boolean default false,
     "educationId" uuid NOT NULL,
     "schoolId" uuid NOT NULL,
     CONSTRAINT education_school_pkey PRIMARY KEY (id),
@@ -196,7 +196,7 @@ CREATE TABLE public.group_skill
     id uuid NOT NULL,
     "createdAt" timestamp without time zone,
     "updatedAt" timestamp without time zone,
-    "isDelete" boolean,
+    "isDelete" boolean  default false,
     "skillId" uuid NOT NULL,
     "groupId" uuid NOT NULL,
     description text COLLATE pg_catalog."default",
@@ -247,7 +247,7 @@ CREATE TABLE public.user_education
     id uuid NOT NULL,
     "createdAt" timestamp without time zone,
     "updatedAt" timestamp without time zone,
-    "isDelete" boolean,
+    "isDelete" boolean  default false,
     "userId" uuid NOT NULL,
     "educationId" uuid NOT NULL, 
     "duringTime" text COLLATE pg_catalog."default",
@@ -296,7 +296,7 @@ CREATE INDEX "fki_fk_userEducation_user"
 CREATE TABLE public.user_experience
 (
     id uuid NOT NULL,
-    "isDelete" boolean,
+    "isDelete" boolean  default false,
     "createdAt" timestamp without time zone,
     "updatedAt" timestamp without time zone,
     "userId" uuid NOT NULL,
@@ -349,7 +349,7 @@ CREATE TABLE public.user_skill
     id uuid NOT NULL,
     "createdAt" timestamp without time zone,
     "updatedAt" timestamp without time zone,
-    "isDelete" boolean,
+    "isDelete" boolean  default false,
     "userId" uuid NOT NULL,
     "skillId" uuid NOT NULL,
     progress bigint,

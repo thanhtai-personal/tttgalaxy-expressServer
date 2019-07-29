@@ -31,7 +31,10 @@ const education = (sequelize, DataTypes) => {
   Education.findByIds = async (ids) => {
     try {
       return await Education.findAll({
-        where: { id: ids },
+        where: { 
+          id: ids,
+          isDelete: false
+        },
         raw: true
       })
     } catch (error) {
@@ -42,7 +45,7 @@ const education = (sequelize, DataTypes) => {
 
   Education.createOrUpdate = async (data) => {
     try {
-      let obj = await Education.findOne({ where: { id: data.id } })
+      let obj = await Education.findOne({ where: { id: data.id, isDelete: false } })
       if (obj) { // update
         return await obj.update(data);
       }

@@ -1,6 +1,16 @@
 -- Table: public.users
 
+-- DROP TABLE public.education_school;
+-- DROP TABLE public.group_skill;
+-- DROP TABLE public.user_education;
+-- DROP TABLE public.user_experience;
+-- DROP TABLE public.user_skill;
 -- DROP TABLE public.users;
+-- DROP TABLE public.skills;
+-- DROP TABLE public.schools;
+-- DROP TABLE public.group;
+-- DROP TABLE public.experiences;
+-- DROP TABLE public.educations;
 
 CREATE TABLE public.users
 (

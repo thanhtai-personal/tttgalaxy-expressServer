@@ -5,6 +5,8 @@ const secret = "tttgalaxy-secret-key"
 
 const jwt = require('jsonwebtoken')
 
+const moment = require('moment')
+
 const portfolioService = require('./../services/portfolio.service')
 
 
@@ -19,7 +21,12 @@ router.get('/portfolio-data', async function (req, res) {
 })
 
 router.post('/update-portfolio', async function (req, res) {
-  let resultData = await portfolioService.updatePortfolioData(req.body)
+  dataReq = req.body
+  if (dataReq.basicInfo.birthDate) {
+    dataReq.basicInfo.birthDate = moment(dataReq.basicInfo.birthDate, 'MM/DD/YYYY')
+  }
+  console.log('dataReq.birthDate222', dataReq.basicInfo.birthDate)
+  let resultData = await portfolioService.updatePortfolioData(dataReq)
   return res.json(resultData)
 })
 

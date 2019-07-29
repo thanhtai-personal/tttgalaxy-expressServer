@@ -25,24 +25,16 @@ const user_education = (sequelize, DataTypes) => {
     },
     isDelete: {
       type: DataTypes.BOOLEAN
-    }
+    },
+    description: {
+      type: DataTypes.STRING
+    },
+    duringTime: {
+      type: DataTypes.STRING
+    },
   }, {
     freezeTableName: true
   });
-
-  UserEducation.findEducationIdsByUserId = async (userId) => {
-    try {
-      let ids = await UserEducation.findAll({
-        attributes: ['educationId'],
-        where: {
-          userId: userId
-        }
-      })
-      return ids.map(idObj => idObj.educationId)
-    } catch (error) {
-      return []
-    }
-  }
 
   
   UserEducation.findByUserId = async (userId) => {
@@ -50,9 +42,11 @@ const user_education = (sequelize, DataTypes) => {
       return await UserEducation.findAll({
         where: {
           userId: userId
-        }
+        },
+        raw: true
       })
     } catch (error) {
+      console.log('error', error)
       return []
     }
   }

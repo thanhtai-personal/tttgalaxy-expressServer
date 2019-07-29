@@ -103,7 +103,6 @@ CREATE TABLE public.experiences
     "createdAt" timestamp without time zone,
     "updatedAt" timestamp without time zone,
     title text COLLATE pg_catalog."default",
-    description text COLLATE pg_catalog."default",
     "isPresent" boolean,
     "isDelete" boolean,
     CONSTRAINT experience_pkey PRIMARY KEY (id)
@@ -129,7 +128,6 @@ CREATE TABLE public.educations
     "createdAt" timestamp without time zone,
     "updatedAt" timestamp without time zone,
     title text COLLATE pg_catalog."default",
-    description text COLLATE pg_catalog."default",
     "isDelete" boolean,
     CONSTRAINT educations_pkey PRIMARY KEY (id)
 )
@@ -253,6 +251,7 @@ CREATE TABLE public.user_education
     "userId" uuid NOT NULL,
     "educationId" uuid NOT NULL, 
     "duringTime" text COLLATE pg_catalog."default",
+    "description" text COLLATE pg_catalog."default",
     CONSTRAINT user_education_pkey PRIMARY KEY (id),
     CONSTRAINT "fk_userEducation_education" FOREIGN KEY ("educationId")
         REFERENCES public.educations (id) MATCH SIMPLE
@@ -303,6 +302,7 @@ CREATE TABLE public.user_experience
     "userId" uuid NOT NULL,
     "experienceId" uuid NOT NULL,
     "duringTime" text COLLATE pg_catalog."default",
+    "description" text COLLATE pg_catalog."default",
     CONSTRAINT user_experience_pkey PRIMARY KEY (id),
     CONSTRAINT "fk_userExperience_experience" FOREIGN KEY ("experienceId")
         REFERENCES public.experiences (id) MATCH SIMPLE

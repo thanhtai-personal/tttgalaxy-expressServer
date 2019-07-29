@@ -303,6 +303,7 @@ CREATE TABLE public.user_experience
     "userId" uuid NOT NULL,
     "experienceId" uuid NOT NULL,
     "duringTime" text COLLATE pg_catalog."default",
+    "description" text COLLATE pg_catalog."default",
     CONSTRAINT user_experience_pkey PRIMARY KEY (id),
     CONSTRAINT "fk_userExperience_experience" FOREIGN KEY ("experienceId")
         REFERENCES public.experiences (id) MATCH SIMPLE

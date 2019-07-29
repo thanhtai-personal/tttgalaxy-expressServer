@@ -62,9 +62,9 @@ const portfolioService = () => {
 
       const getEducation = async (userId) => {
         try {
-          let educationIds = await models.UserEducation.findEducationIdsByUserId(userId)
           let userEducation = await models.UserEducation.findByUserId(userId)
-          let education = await models.Skill.findByIds(educationIds)
+          let educationIds = userEducation.map(ue => ue.educationId)
+          let education = await models.Education.findByIds(educationIds)
           let educationSchool = await models.EducationSchool.findByEducationIds(educationIds)
           let schoolIds = educationSchool.map(es => es.schoolId)
           let school = await models.School.findByIds(schoolIds)

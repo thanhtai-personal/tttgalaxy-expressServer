@@ -54,6 +54,7 @@ const user_experience = (sequelize, DataTypes) => {
 
   UserExperience.findByUserId = async (userId) => {
     try {
+      console.log("try findByUserId")
       let ids = await UserExperience.findAll({
         where: {
           userId: userId
@@ -61,6 +62,7 @@ const user_experience = (sequelize, DataTypes) => {
       })
       return ids
     } catch (error) {
+      console.log('error', error)
       return []
     }
   }

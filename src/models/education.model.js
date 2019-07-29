@@ -12,17 +12,8 @@ const education = (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING
     },
-    description: {
-      type: DataTypes.STRING
-    },
     title: {
       type: DataTypes.STRING
-    },
-    from: {
-      type: DataTypes.DATE
-    },
-    to: {
-      type: DataTypes.DATE
     },
     createdAt: {
       type: DataTypes.DATE
@@ -32,9 +23,6 @@ const education = (sequelize, DataTypes) => {
     },
     isDelete: {
       type: DataTypes.BOOLEAN
-    },
-    isPresent: {
-      type: DataTypes.BOOLEAN
     }
   }, {
     freezeTableName: true
@@ -43,9 +31,11 @@ const education = (sequelize, DataTypes) => {
   Education.findByIds = async (ids) => {
     try {
       return await Education.findAll({
-        where: { id: ids }
+        where: { id: ids },
+        raw: true
       })
     } catch (error) {
+      console.log('error', error)
       return []
     }
   }

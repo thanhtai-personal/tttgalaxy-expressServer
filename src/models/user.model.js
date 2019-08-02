@@ -66,7 +66,6 @@ const user = (sequelize, DataTypes) => {
       let user = await User.findOne({ where: { email: model.email, isDelete: false } })
       if (user) { // update
         try {
-          console.log('model', model)
           await user.update(model);
         } catch (error) {
           console.log('error', error)

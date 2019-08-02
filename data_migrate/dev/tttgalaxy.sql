@@ -390,5 +390,8 @@ CREATE INDEX "fki_fk_userSkill_user"
     ("userId")
     TABLESPACE pg_default;
 
+ALTER TABLE public.users
+    ADD COLUMN "isPublicProfile" boolean;
+
 
 	

@@ -33,6 +33,9 @@ const portfolioService = () => {
     //need to use join db
     try {
       let user = await models.User.findByEmail(data.email)
+      if (!_.isNil(data.publicKey) && !user.isPublicProfile) {
+        return { message: 'user profile is not public.'}
+      }
       user.password = null
       const getSkill = async (userId) => {
         try {
@@ -138,6 +141,14 @@ const portfolioService = () => {
         message: "update error",
         data: error
       }
+    }
+  }
+
+  PortfolioService.publicProfile = async (data) => {
+    try {
+      await models.User.updateByFieldName(data)
+    } catch (error) {
+      console.log('publicProfile error', error)
     }
   }
 

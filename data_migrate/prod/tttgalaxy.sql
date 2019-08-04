@@ -403,5 +403,8 @@ CREATE INDEX "fki_fk_userSkill_user"
 ALTER TABLE public.users
     ADD COLUMN "isPublicProfile" boolean;
 
+ALTER TABLE public.users
+    ADD COLUMN "publicKey" text COLLATE pg_catalog."default";
+
 
 	

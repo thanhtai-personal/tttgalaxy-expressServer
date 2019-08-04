@@ -16,6 +16,17 @@ router.get('/portfolio-data', async function (req, res) {
     email: decodedTokenData.email,
     id: decodedTokenData.id
   }
+  
+  let resultData = await portfolioService.getPortfolioData(dataReq)
+  return res.json(resultData)
+})
+
+router.post('/get-public-portfolio-data', async function (req, res) {
+  let decodedTokenData = jwt.verify(req.body.publicKey, secret);
+  let dataReq = {
+    email: decodedTokenData,
+    publicKey: req.body.publicKey
+  }
   let resultData = await portfolioService.getPortfolioData(dataReq)
   return res.json(resultData)
 })
@@ -25,9 +36,19 @@ router.post('/update-portfolio', async function (req, res) {
   if (dataReq.basicInfo.birthDate) {
     dataReq.basicInfo.birthDate = moment(dataReq.basicInfo.birthDate, 'MM/DD/YYYY')
   }
-  console.log('dataReq.birthDate222', dataReq.basicInfo.birthDate)
   let resultData = await portfolioService.updatePortfolioData(dataReq)
   return res.json(resultData)
+})
+
+router.post('/public-profile', async function (req, res) {
+  let decodedTokenData = jwt.verify(req.headers['x-access-token'], secret);
+  let dataReq = {
+    email: decodedTokenData.email,
+    isPublicProfile: req.body.isPublicProfile,
+    publicKey: req.body.isPublicProfile ? jwt.sign(decodedTokenData.email, secret): null
+  }
+  await portfolioService.publicProfile(dataReq)
+  return res.json(dataReq.publicKey)
 })
 
 module.exports = router;

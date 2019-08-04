@@ -43,6 +43,12 @@ const user = (sequelize, DataTypes) => {
     },
     isDelete: {
       type: DataTypes.BOOLEAN
+    },
+    isPublicProfile: {
+      type: DataTypes.BOOLEAN
+    },
+    publicKey: {
+      type: DataTypes.STRING,
     }
   }, {
     freezeTableName: true
@@ -59,6 +65,23 @@ const user = (sequelize, DataTypes) => {
     }
     return user;
   };
+
+  User.updateByFieldName = async (data) => {
+    try {
+      let user = await User.findOne({ where: { email: data.email, isDelete: false } })
+      if (user) { // update
+        try {
+          await user.update(data);
+        } catch (error) {
+          console.log('error', error)
+        }
+      } else {
+        return null
+      }
+    } catch (error) {
+      console.log('updateByFieldName error', error)
+    }
+  }
 
 
   User.createOrUpdateUser = async model => {

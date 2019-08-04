@@ -16,7 +16,8 @@ var app = express();
 
 const publicAPIs = [
   '/api/auth/login',
-  '/api/auth/register'
+  '/api/auth/register',
+  '/api/portfolio/get-public-portfolio-data'
 ]
 const secret = "tttgalaxy-secret-key"
 

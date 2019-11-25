@@ -11,13 +11,12 @@ const blogService = require('./../services/blog.service')
 
 
 router.get('/get-blogs', async function (req, res) {
-  let decodedTokenData = jwt.verify(req.headers['x-access-token'], secret);
-  let resultData = await blogService.getBlogs(decodedTokenData.id)
+  let resultData = await blogService.getBlogs(req.body.userId)
   return res.json(resultData)
 })
 
 router.get('/get-blog', async function (req, res) {
-  let resultData = await blogService.getBlog(req.id)
+  let resultData = await blogService.getBlog(req.body.blogId)
   return res.json(resultData)
 })
 

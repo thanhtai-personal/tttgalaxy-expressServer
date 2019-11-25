@@ -47,7 +47,8 @@ const models = {
   GroupSkill: sequelize.import('./group_skill.model'),
   UserEducation: sequelize.import('./user_education.model'),
   UserExperience: sequelize.import('./user_experience.model'),
-  UserSkill: sequelize.import('./user_skill.model')
+  UserSkill: sequelize.import('./user_skill.model'),
+  Blog: sequelize.import('./blog.model')
 };
 
 Object.keys(models).forEach(key => {

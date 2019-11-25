@@ -397,4 +397,32 @@ ALTER TABLE public.users
     ADD COLUMN "publicKey" text COLLATE pg_catalog."default";
 
 
+-- Table: public.blog
+
+-- DROP TABLE public.blog;
+
+CREATE TABLE public.blog
+(
+    "htmlContent" text COLLATE pg_catalog."default",
+    id uuid NOT NULL,
+    "createdAt" date,
+    "updatedAt" date,
+    "isDelete" boolean,
+    title text COLLATE pg_catalog."default",
+    "authorId" uuid NOT NULL,
+    CONSTRAINT pk_blog PRIMARY KEY (id),
+    CONSTRAINT fk_users_blog FOREIGN KEY ("authorId")
+        REFERENCES public.users (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.blog
+    OWNER to postgres;
+
+
 	

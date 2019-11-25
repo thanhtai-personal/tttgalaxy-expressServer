@@ -7,6 +7,7 @@ const logger = require('morgan');
 const jwt = require('jsonwebtoken')
 
 const authRouter = require('./src/controllers/auth.controller');
+const blogRouter = require('./src/controllers/blog.controller');
 const portfolioRouter = require('./src/controllers/portfolio.controller');
 
 const cors = require('cors')
@@ -71,6 +72,7 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 
 app.use('/api/portfolio', portfolioRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/blog', blogRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
